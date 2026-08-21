@@ -105,123 +105,310 @@ CREATE TABLE Table_Name (
 
 **Question 1**
 --
--- Paste Question 1 here
+Write an SQL query to change the name of the column id to employee_id in the table employee.
+For example:
+
+Test	Result
+pragma table_info('employee');
+cid         name         type        notnull     dflt_value  pk
+----------  -----------  ----------  ----------  ----------  ----------
+0           employee_id  integer     0                       0
+1           salary       number      0                       0
 
 ```sql
--- Paste your SQL code below for Question 1
+ALTER TABLE employee
+RENAME COLUMN id TO employee_id;
 ```
 
 **Output:**
+<img width="1237" height="145" alt="image" src="https://github.com/user-attachments/assets/f0f31cf4-d924-4f51-92d0-8052e1a77b75" />
 
-![Output1](output.png)
 
 **Question 2**
 ---
--- Paste Question 2 here
+Write a SQL query to Add a new column mobilenumber as number in the Student_details table.
+
+Sample table: Student_details
+
+ cid              name             type   notnull     dflt_value  pk
+---------------  ---------------  -----  ----------  ----------  ----------
+0                RollNo           int    0                       1
+1                Name             VARCH  1                       0
+2                Gender           TEXT   1                       0
+3                Subject          VARCH  0                       0
+4                MARKS            INT (  0                       0
+For example:
+
+Test	Result
+pragma table_info('Student_details');
+cid         name        type        notnull     dflt_value  pk
+----------  ----------  ----------  ----------  ----------  ----------
+0           RollNo      int         0                       1
+1           Name        VARCHAR(10  1                       0
+2           Gender      TEXT        1                       0
+3           Subject     VARCHAR(30  0                       0
+4           MARKS       INT (3)     0                       0
+5           mobilenumb  number      0                       0
 
 ```sql
--- Paste your SQL code below for Question 2
+ALTER TABLE student_details
+ADD COLUMN mobilenumber number;
 ```
 
 **Output:**
 
-![Output2](output.png)
+<img width="1083" height="213" alt="image" src="https://github.com/user-attachments/assets/38fa5581-1d24-4b2d-bef9-910fdbb01ac1" />
+
 
 **Question 3**
 ---
--- Paste Question 3 here
+Create a table named Employees with the following constraints:
+
+EmployeeID should be the primary key.
+FirstName and LastName should be NOT NULL.
+Email should be unique.
+Salary should be greater than 0.
+DepartmentID should be a foreign key referencing the Departments table.
+For example:
+
+Test	Result
+-- Attempt to insert a record with NULL FirstName
+INSERT INTO Employees (EmployeeID, FirstName, LastName, Email, Salary, DepartmentID)
+VALUES (1, NULL, 'Doe', 'john.doe@example.com', 50000, 1);
+Error: NOT NULL constraint failed: Employees.FirstName
+
 
 ```sql
--- Paste your SQL code below for Question 3
+CREATE TABLE Employees (
+    EmployeeID INTEGER PRIMARY KEY,
+    FirstName TEXT NOT NULL,
+    LastName TEXT NOT NULL,
+    Email TEXT UNIQUE,
+    Salary INTEGER CHECK (Salary>0),
+    DepartmentID INTEGER,
+    FOREIGN KEY (DepartmentID) REFERENCES Departments (DepartmentID)
+);
 ```
 
 **Output:**
 
-![Output3](output.png)
+<img width="843" height="261" alt="image" src="https://github.com/user-attachments/assets/e4ac7d2b-a11a-4cf0-9f35-c23e6e0f2cd1" />
+
 
 **Question 4**
 ---
--- Paste Question 4 here
+Create a table named Bonuses with the following constraints:
+BonusID as INTEGER should be the primary key.
+EmployeeID as INTEGER should be a foreign key referencing Employees(EmployeeID).
+BonusAmount as REAL should be greater than 0.
+BonusDate as DATE.
+Reason as TEXT should not be NULL.
+For example:
+
+Test	Result
+INSERT INTO Bonuses (BonusID, EmployeeID, BonusAmount, BonusDate, Reason) VALUES (1, 6, 1000.0, '2024-08-01', 'Outstanding performance');
+SELECT * FROM Bonuses;
+BonusID     EmployeeID  BonusAmount  BonusDate   Reason
+----------  ----------  -----------  ----------  -----------------------
+1           6           1000.0       20
 
 ```sql
--- Paste your SQL code below for Question 4
+CREATE TABLE Bonuses (
+    BonusID INTEGER PRIMARY KEY,
+    EmployeeID INTEGER,
+    BonusAmount REAL CHECK (BonusAmount > 0),
+    BonusDate DATE,
+    Reason TEXT NOT NULL,
+    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
+);
 ```
 
 **Output:**
 
-![Output4](output.png)
+<img width="1109" height="151" alt="image" src="https://github.com/user-attachments/assets/126050ee-488b-4dcd-98a2-171c6ca52db4" />
+
 
 **Question 5**
 ---
--- Paste Question 5 here
+Insert all books from Out_of_print_books into Books
 
-```sql
--- Paste your SQL code below for Question 5
+Table attributes are ISBN, Title, Author, Publisher, YearPublished
+
+For example:
+
+Test	Result
+select * from Books;
+ISBN            Title           Author              Publisher      YearPublished
+--------------  --------------  ------------------  -------------  -------------
+978-1234567890  The Lost World  Arthur Conan Doyle  Vintage Books  1912
+978-0987654321  Gone with the   Margaret Mitchell   Macmillan      1936
+978-1122334455  Moby Dick       Herman Melville     Harper & Brot  1851
+```
+
+INSERT INTO Books (ISBN, Title, Author, Publisher, YearPublished)
+SELECT ISBN, Title, Author, Publisher, YearPublished
+FROM Out_of_print_books;
 ```
 
 **Output:**
+<img width="1228" height="156" alt="image" src="https://github.com/user-attachments/assets/292266ad-806a-42fd-a3c3-0864d5af7af1" />
 
-![Output5](output.png)
 
 **Question 6**
 ---
--- Paste Question 6 here
+Create a table named Attendance with the following constraints:
+AttendanceID as INTEGER should be the primary key.
+EmployeeID as INTEGER should be a foreign key referencing Employees(EmployeeID).
+AttendanceDate as DATE.
+Status as TEXT should be one of 'Present', 'Absent', 'Leave'.
+For example:
+
+Test	Result
+INSERT INTO Attendance (AttendanceID, EmployeeID, AttendanceDate, Status) VALUES (1, 1, '2024-08-01', 'Present');
+SELECT * FROM Attendance;
+AttendanceID  EmployeeID  AttendanceDate  Status
+------------  ----------  --------------  ----------
+1             1           2024-08-01      Present
 
 ```sql
--- Paste your SQL code below for Question 6
+CREATE TABLE Attendance (
+    AttendanceID INTEGER PRIMARY KEY,
+    EmployeeID INTEGER,
+    AttendanceDate DATE,
+    Status TEXT CHECK (Status IN ('Present', 'Absent', 'Leave')),
+    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
+);
 ```
 
 **Output:**
 
-![Output6](output.png)
+<img width="834" height="147" alt="image" src="https://github.com/user-attachments/assets/bbe5a283-e2e0-456b-89f4-5090226073ac" />
+
 
 **Question 7**
 ---
--- Paste Question 7 here
+Insert the following students into the Student_details table:
+RollNo      Name        Gender      Subject     MARKS
+----------  ----------  ----------  ----------  ----------
+202            Ella King         F           Chemistry   87
+203            James Bond   M          Literature    78
+
+ 
+
+ 
+
+For example:
+
+Test	Result
+SELECT * FROM Student_details;
+RollNo      Name        Gender      Subject     MARKS
+----------  ----------  ----------  ----------  ----------
+202         Ella King   F           Chemistry   87
+203         James Bond  M           Literature  78
+
 
 ```sql
--- Paste your SQL code below for Question 7
+INSERT INTO Student_details (RollNo, Name,Gender,Subject, MARKS)
+VALUES
+(202,'Ella King','F','Chemistry ',  87),
+(203 ,'James Bond',   'M ',         'Literature',    78);
 ```
 
 **Output:**
 
-![Output7](output.png)
+<img width="1193" height="162" alt="image" src="https://github.com/user-attachments/assets/ca6aba22-d8b8-4818-aab3-09ff261e8f57" />
+
 
 **Question 8**
 ---
--- Paste Question 8 here
+In the Student_details table, insert a student record where some fields are NULL, another record where all fields are filled without any NULL values, and a third record where some fields are filled, and others are left as NULL.
+
+RollNo      Name            Gender      Subject      MARKS
+----------  ------------    ----------  ----------   ----------
+205         Olivia Green    F
+207         Liam Smith      M           Mathematics  85
+208         Sophia Johnson  F           Science
+For example:
+
+Test	Result
+select * from Student_details;
+RollNo      Name          Gender      Subject     MARKS
+----------  ------------  ----------  ----------  ----------
+205         Olivia Green  F
+207         Liam Smith    M           Mathematic  85
+208         Sophia Johns  F           Science
 
 ```sql
--- Paste your SQL code below for Question 8
+INSERT INTO Student_details (RollNo, Name, Gender, Subject, MARKS)
+VALUES
+(205, 'Olivia Green', 'F', NULL, NULL),
+(207, 'Liam Smith', 'M', 'Mathematics', 85),
+(208, 'Sophia Johnson', 'F', 'Science', NULL);
 ```
 
 **Output:**
 
-![Output8](output.png)
+<img width="1226" height="177" alt="image" src="https://github.com/user-attachments/assets/84af70c4-b03f-4ff9-b705-c0e272048dbb" />
+
 
 **Question 9**
 ---
--- Paste Question 9 here
+Create a table named Department with the following constraints:
+DepartmentID as INTEGER should be the primary key.
+DepartmentName as TEXT should be unique and not NULL.
+Location as TEXT.
+For example:
+
+Test	Result
+INSERT INTO Department (DepartmentID, DepartmentName, Location) VALUES (1, 'Human Resources', 'New York');
+select * from Department;
+DepartmentID  DepartmentName   Location
+------------  ---------------  ----------
+1             Human Resources  New York
 
 ```sql
--- Paste your SQL code below for Question 9
+CREATE TABLE Department(
+    DepartmentID INTEGER PRIMARY KEY,
+    DepartmentName TEXT UNIQUE NOT NULL,
+    Location TEXT
+);
 ```
 
 **Output:**
 
-![Output9](output.png)
+<img width="912" height="156" alt="image" src="https://github.com/user-attachments/assets/c25c57c7-c8ea-4139-b660-2d719207dbc6" />
+
 
 **Question 10**
 ---
--- Paste Question 10 here
+Create a table named Locations with the following columns:
+
+LocationID as INTEGER
+LocationName as TEXT
+Address as TEXT
+For example:
+
+Test	Result
+pragma table_info('Locations');
+cid       name             type        notnull     dflt_value  pk
+--------  ---------------  ----------  ----------  ----------  ----------
+0         LocationID       INTEGER     0                       0
+1         LocationName     TEXT        0                       0
+2         Address          TEXT        0                       0
+
 
 ```sql
--- Paste your SQL code below for Question 10
+CREATE TABLE Locations(
+    LocationID INTEGER,
+    LocationName TEXT,
+    Address TEXT
+);
 ```
 
 **Output:**
 
-![Output10](output.png)
+<img width="1137" height="230" alt="image" src="https://github.com/user-attachments/assets/68a539e1-f139-45fa-bd58-8acd6201e4ef" />
+
 
 
 ## RESULT
